@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中英文翻譯</title>
+    <style>
+		
+		.iframe-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 1px auto;
+            height: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+			max-width: 100%;
+            height: 100%;
+            border: none;
+        }
+		
+		
+		
+		
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding: 0 10px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            min-height: 150px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 24px;
+            line-height: 1.5;
+        }
+
+        button {
+            padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 30px);
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            width: auto;
+            min-width: 120px;
+        }
+
+        button:hover {
+            background-color: #1557b0;
+            transform: translateY(-2px);
+        }
+
+        .avatar-container {
+            text-align: center;
+            margin-bottom: clamp(20px, 4vw, 30px);
+            padding: 0 10px;
+        }
+
+        .avatar {
+            width: clamp(150px, 30vw, 250px);
+            height: auto;
+            aspect-ratio: 5/4;
+            border-radius: 50%;
+            animation: slowBounce 3s ease-in-out infinite;
+            transition: opacity 0.5s ease-in-out;
+            object-fit: cover;
+        }
+
+        .avatar:hover {
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes slowBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* 大螢幕 */
+        @media screen and (min-width: 1200px) {
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        /* 平板 */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 20px;
+                margin: 10px auto;
+            }
+
+            textarea {
+                min-height: 150px;
+            }
+        }
+
+        /* 手機 */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 5px auto;
+            }
+
+            .avatar {
+                width: 150px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+
+        /* 深色模式支援 */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+            }
+
+            .container {
+                background-color: #2d2d2d;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            }
+
+            h2 {
+                color: #4a9eff;
+            }
+
+            textarea {
+                background-color: #333;
+                color: #fff;
+                border-color: #444;
+            }
+
+            textarea::placeholder {
+                color: #888;
+            }
+
+            button {
+                background-color: #4a9eff;
+            }
+
+            button:hover {
+                background-color: #357abd;
+            }
+        }
+
+        /* 確保可訪問性 */
+        @media (prefers-reduced-motion: reduce) {
+            .avatar {
+                animation: none;
+            }
+
+            button {
+                transition: none;
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .clear-button {
+            background-color: #dc3545;
+        }
+
+        .clear-button:hover {
+            background-color: #c82333;
+        }
+		
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar-container">
+           <img src="1.jpg" alt="AI Translate" class="avatar" id="avatar">
+        </div>
+        <h2>中英文翻譯</h2>
+        <form id="translateForm" onsubmit="redirectToTranslate(event)">
+            <div class="input-group">
+                <textarea 
+                    id="textInput" 
+                    placeholder="請輸入中文或英文..."
+                    required></textarea>
+            </div>
+            <div class="button-group">
+                <button type="submit">立即翻譯</button>
+                <button type="button" onclick="clearAll()" class="clear-button">清除內容</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function redirectToTranslate(event) {
+            event.preventDefault();
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                alert('請輸入要翻譯的文字');
+                return;
+            }
+
+            const isChinese = /[\u4e00-\u9fa5]/.test(text);
+            const url = `https://fanyi.sogou.com/text?keyword=${encodeURIComponent(text)}&transfrom=${isChinese ? 'zh-CHS' : 'en'}&transto=${isChinese ? 'en' : 'zh-CHS'}&model=general`;
+          //  window.open(url, '_blank');
+			document.getElementById('translateFrame').src = url;
+        }
+	
+		
+		
+        // 添加快捷鍵支持
+        document.getElementById('textInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                redirectToTranslate(e);
+            }
+        });
+
+        // 添加頭像切換功能
+        function changeAvatar() {
+            const avatar = document.getElementById('avatar');
+            const currentSrc = avatar.src;
+            avatar.style.opacity = '0';
+            
+            setTimeout(() => {
+                let newNumber;
+                do {
+                    newNumber = Math.floor(Math.random() * 3) + 1;
+                } while (currentSrc.includes(newNumber + '.jpg'));
+                
+                avatar.src = newNumber + '.jpg';
+                avatar.style.opacity = '1';
+            }, 500);
+        }
+
+        // 每15秒切換一次頭像
+        setInterval(changeAvatar, 15000);
+
+        // 頁面加載時設置頭像初始狀態
+        window.onload = function() {
+            document.getElementById('avatar').style.opacity = '1';
+        }
+
+        // 添加圖片加載錯誤處理
+        document.getElementById('avatar').onerror = function() {
+            this.src = '1.jpg';
+        };
+
+        function clearAll() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('translateFrame').src = 'about:blank';
+        }
+    </script>
+	
+	
+	
+	
+	
+	 <div class="iframe-container">
+        <iframe id="translateFrame" src="about:blank"></iframe>
+    </div>
+	
+	
+	
+	
+</body>
+</html>
